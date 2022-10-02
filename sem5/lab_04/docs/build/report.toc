@@ -1,0 +1,10 @@
+\babel@toc {russian}{}
+\contentsline {chapter}{\numberline {1}\IeC {\CYRT }\IeC {\cyre }\IeC {\cyro }\IeC {\cyrr }\IeC {\cyri }\IeC {\cyrt }\IeC {\cyri }\IeC {\cyrch }\IeC {\cyre }\IeC {\cyrs }\IeC {\cyrk }\IeC {\cyri }\IeC {\cyre } \IeC {\cyrs }\IeC {\cyrv }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyrya }}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}fork}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}exec}{5}{section.1.2}%
+\contentsline {chapter}{\numberline {2}\IeC {\CYRZ }\IeC {\cyra }\IeC {\cyrd }\IeC {\cyra }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyrya }}{7}{chapter.2}%
+\contentsline {section}{\numberline {2.1}\IeC {\CYRZ }\IeC {\cyra }\IeC {\cyrd }\IeC {\cyra }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre } 1}{7}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Задание 2}{9}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Задание 3}{11}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Задание 4}{13}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Задание 5}{15}{section.2.5}%

@@ -1,0 +1,1 @@
+cmd_/home/rulldeef/Projects/os-lab/sem6/lab_work/code/tasklet/Module.symvers := sed 's/\.ko$$/\.o/' /home/rulldeef/Projects/os-lab/sem6/lab_work/code/tasklet/modules.order | scripts/mod/modpost -m -a  -o /home/rulldeef/Projects/os-lab/sem6/lab_work/code/tasklet/Module.symvers -e -i Module.symvers   -T -

@@ -1,0 +1,8 @@
+\strdef{softirq\_action}
+
+\begin{lstlisting}
+struct softirq_action
+{
+	void	(*action)(struct softirq_action *);
+};
+\end{lstlisting}

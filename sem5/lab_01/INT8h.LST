@@ -1,0 +1,89 @@
+		Temp.lst  Sourcer Listing v2.13    11-Sep-21   5:28 am
+
+	;================;
+	; INTERUPTION 8h ;
+	;================;
+020E:0746  E8 0070				call	sub_1	; (07B9)
+020E:0749  06					push	es
+020E:074A  1E					push	ds
+020E:074B  50					push	ax
+020E:074C  52					push	dx
+020E:074D  B8 0040				mov	ax,40h
+020E:0750  8E D8				mov	ds,ax
+020E:0752  33 C0				xor	ax,ax		; Zero register
+020E:0754  8E C0				mov	es,ax
+020E:0756  FF 06 006C			inc	word ptr ds:[6Ch]
+020E:075A  75 04				jnz	loc_16
+020E:075C  FF 06 006E			inc	word ptr ds:[6Eh]
+			loc_16:								;  xref 020E:075A
+020E:0760  83 3E 006E 18		cmp	word ptr ds:[6Eh],18h
+020E:0765  75 15				jne	loc_17
+020E:0767  81 3E 006C 00B0		cmp	word ptr ds:[6Ch],0B0h
+020E:076D  75 0D				jne	loc_17
+020E:076F  A3 006E				mov	word ptr ds:[6Eh],ax
+020E:0772  A3 006C				mov	word ptr ds:[6Ch],ax
+020E:0775  C6 06 0070 01		mov	byte ptr ds:[70h],1
+020E:077A  0C 08				or	al,8
+			loc_17:								;  xref 020E:0765, 076D
+020E:077C  50					push	ax
+020E:077D  FE 0E 0040			dec	byte ptr ds:[40h]
+020E:0781  75 0B				jnz	loc_18
+020E:0783  80 26 003F F0		and	byte ptr ds:[3Fh],0F0h
+020E:0788  B0 0C				mov	al,0Ch
+020E:078A  BA 03F2				mov	dx,3F2h
+020E:078D  EE					out	dx,al		; port 3F2h, dsk0 contrl output
+			loc_18:								;  xref 020E:0781
+020E:078E  58					pop	ax
+020E:078F  F7 06 0314 0004		test	word ptr ds:[314h],4
+												; (0040:0314=5200h)
+020E:0795  75 0C				jnz	loc_19		; Jump if not zero
+020E:0797  9F					lahf			; Load ah from flags
+020E:0798  86 E0				xchg	ah,al
+020E:079A  50					push	ax
+020E:079B  26: FF 1E 0070		call	dword ptr es:[70h]
+												; (0000:0070=6ADh)
+020E:07A0  EB 03				jmp	short loc_20; (07A5)
+020E:07A2  90					nop
+			loc_19:								;  xref 020E:0795
+020E:07A3  CD 1C				int	1Ch			; Timer break (call each 18.2ms)
+			loc_20:								;  xref 020E:07A0
+020E:07A5  E8 0011				call	sub_1	; (07B9)
+020E:07A8  B0 20				mov	al,20h
+020E:07AA  E6 20				out	20h,al		; port 20h, 8259-1 int command
+	;  al = 20h, end of interrupt
+020E:07AC  5A					pop	dx
+020E:07AD  58					pop	ax
+020E:07AE  1F					pop	ds
+020E:07AF  07					pop	es
+020E:07B0  E9 FE99				jmp	$-164h		; (06AC)
+...
+020E:06AC  CF 					iret  			; Interuption return
+
+	;==============================;
+	; SUBROUTINE                   ;
+	; Called from: 020E:0746, 07A5 ;
+	;==============================;
+				sub_1		proc	near
+020E:07B9  1E					push	ds
+020E:07BA  50					push	ax
+020E:07BB  B8 0040				mov	ax,40h
+020E:07BE  8E D8				mov	ds,ax
+020E:07C0  9F					lahf			; Load ah from flags
+020E:07C1  F7 06 0314 2400		test word ptr ds:[314h],2400h
+												; (0040:0314=5200h)
+020E:07C7  75 0C				jnz	loc_22		; Jump if not zero
+020E:07C9  F0 81 26 0314 FDFF	lock and word ptr ds:[314h],0FDFFh
+												; (0040:0314=5200h)
+			loc_21:								;  xref 020E:07D6
+020E:07D0  9E					sahf			; Store ah into flags
+020E:07D1  58					pop	ax
+020E:07D2  1F					pop	ds
+020E:07D3  EB 03				jmp	short $+5h
+			loc_22:								;  xref 020E:07C7
+020E:07D5  FA					cli				; Disable interrupts
+020E:07D6  EB F8				jmp	short loc_21; (07D0)
+				sub_1		endp
+  
+020E:07D8  C3					retn
+  
+  

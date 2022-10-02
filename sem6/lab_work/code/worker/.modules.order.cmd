@@ -1,0 +1,1 @@
+cmd_/home/rulldeef/Projects/os-lab/sem6/lab_work/code/worker/modules.order := {   echo /home/rulldeef/Projects/os-lab/sem6/lab_work/code/worker/wormod.ko; :; } | awk '!x[$$0]++' - > /home/rulldeef/Projects/os-lab/sem6/lab_work/code/worker/modules.order

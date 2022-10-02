@@ -1,0 +1,123 @@
+\strdef{task\_struct}
+
+\begin{lstlisting}
+struct task_struct {
+	struct thread_info		thread_info;
+	unsigned int			__state;
+
+	void				*stack;
+	refcount_t			usage;
+	/* Per task flags (PF_*), defined further below: */
+	unsigned int			flags;
+	unsigned int			ptrace;
+
+	/* smp fields skipped... */
+
+	int				on_rq; /* run queue (per CPU) */
+
+	int				prio;
+	int				static_prio;
+	int				normal_prio;
+	unsigned int			rt_priority;
+
+	/* ... */
+
+	struct sched_info		sched_info;
+
+	struct list_head		tasks;
+
+	/* ... */
+
+	struct mm_struct		*mm; /* memory mapping */
+	struct mm_struct		*active_mm;
+
+	int				exit_state;
+	int				exit_code;
+	int				exit_signal;
+
+	/* The signal sent when the parent dies: */
+	int				pdeath_signal;
+	
+	/* ... */
+
+	pid_t				pid;
+	pid_t				tgid;
+
+	/* Real parent process: */
+	struct task_struct __rcu	*real_parent;
+
+	/* Recipient of SIGCHLD, wait4() reports: */
+	struct task_struct __rcu	*parent;
+
+	struct list_head		children;
+	struct list_head		sibling;
+	struct task_struct		*group_leader;
+
+	/* PID/PID hash table linkage. */
+	struct pid			*thread_pid;
+	struct hlist_node		pid_links[PIDTYPE_MAX];
+	struct list_head		thread_group;
+	struct list_head		thread_node;
+
+	/* PF_KTHREAD | PF_IO_WORKER */
+	void				*worker_private;
+
+	/*
+	 * executable name, excluding path.
+	 *
+	 * - normally initialized setup_new_exec()
+	 * - access it with [gs]et_task_comm()
+	 * - lock it with task_lock()
+	 */
+	char				comm[TASK_COMM_LEN];
+
+	struct nameidata		*nameidata;
+
+#ifdef CONFIG_SYSVIPC /* System V IPC related stuff */
+	struct sysv_sem			sysvsem;
+	struct sysv_shm			sysvshm;
+#endif
+
+	/* Filesystem information: */
+	struct fs_struct		*fs;
+
+	/* Open file information: */
+	struct files_struct		*files;
+
+	/* Namespaces: */
+	struct nsproxy			*nsproxy;
+
+	/* Signal handlers: */
+	struct signal_struct		*signal;
+	struct sighand_struct __rcu		*sighand;
+	sigset_t			blocked;
+	sigset_t			real_blocked;
+	/* Restored if set_restore_sigmask() was used: */
+	sigset_t			saved_sigmask;
+	struct sigpending		pending;
+
+#ifdef CONFIG_AUDIT
+#ifdef CONFIG_AUDITSYSCALL
+	struct audit_context		*audit_context;
+#endif
+	kuid_t				loginuid;
+	unsigned int			sessionid;
+#endif
+
+	/* Protection against (de-)allocation: mm, files, fs, tty, keyrings, mems_allowed, mempolicy: */
+	spinlock_t			alloc_lock;
+
+	/* ... */
+
+	/*
+	 * I/O subsystem state of the associated processes.  It is refcounted
+	 * and kmalloc'ed. These could be shared between processes.
+	 */
+	struct io_context		*io_context;
+
+	/* ... */
+
+	/* CPU-specific state of this task: */
+	struct thread_struct		thread;
+};
+\end{lstlisting}

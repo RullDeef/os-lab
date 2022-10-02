@@ -1,0 +1,1 @@
+cmd_/home/rulldeef/Projects/os-lab/sem6/lab_work/code/worker/wormod.ko := ld -r -m elf_x86_64 --build-id=sha1  -T scripts/module.lds -o /home/rulldeef/Projects/os-lab/sem6/lab_work/code/worker/wormod.ko /home/rulldeef/Projects/os-lab/sem6/lab_work/code/worker/wormod.o /home/rulldeef/Projects/os-lab/sem6/lab_work/code/worker/wormod.mod.o;  true

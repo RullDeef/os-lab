@@ -1,0 +1,167 @@
+.386p
+
+
+descr struc
+    limit   dw 0
+    base_l  dw 0
+    base_m  db 0
+    attr_1  db 0
+    attr_2  db 0
+    base_h  db 0
+descr ends
+
+
+idescr struc
+    offs_l  dw 0
+    sel     dw 0
+    cntr    db 0
+    attr    db 0
+    offs_h  dw 0
+idescr ends
+
+
+stack32 segment  para stack 'STACK'
+    stack_start db  100h dup(?)
+    stack_size = $-stack_start
+stack32 ends
+
+
+data32 segment para 'data'
+    gdt_null  descr <>
+    gdt_code16 descr <code16_size-1,0,0,98h>
+    gdt_data4gb descr <0FFFFh,0,0,92h,0CFh>
+    gdt_code32 descr <code32_size-1,0,0,98h,40h>
+    gdt_data32 descr <data_size-1,0,0,92h,40h>
+    gdt_stack32 descr <stack_size-1,0,0,92h,40h>
+    gdt_video16 descr <3999,8000h,0Bh,92h>
+
+    gdt_size=$-gdt_null
+    pdescr    df 0
+
+    code16s=8
+    data4gbs=16
+    code32s=24
+    data32s=32
+    stack32s=40
+    video16s=48
+
+    idt label byte
+
+    ;[0; 12]
+    idescr_0_12 idescr 13 dup (<0,code32s,0,8Fh,0>)
+    idescr_13 idescr <0,code32s,0,8Fh,0>
+    ;[14, 31]
+    idescr_14_31 idescr 18 dup (<0,code32s,0,8Fh,0>)
+
+    int08 idescr <0,code32s,0,10001110b,0> 
+    int09 idescr <0,code32s,0,10001110b,0>
+
+    idt_size = $-idt 
+
+    ipdescr df 0
+    ipdescr16 dw 3FFh, 0, 0
+
+    mask_master db 0        
+    mask_slave  db 0        
+
+    asciimap   db 0, 0, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 45, 61, 0, 0
+    db 81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 91, 93, 0, 0, 65, 83
+    db 68, 70, 71, 72, 74, 75, 76, 59, 39, 96, 0, 92, 90, 88, 67
+    db 86, 66, 78, 77, 44, 46, 47
+
+    flag_enter_pr db 0
+    cnt_time      db 0            
+
+    syml_pos      dd 2 * 80 * 5
+
+    interval=10
+
+    mem_pos=30*2
+    mem_value_pos=36*2
+    mb_pos=45*2
+    cursor_pos=80*2*2+38*2
+    param=1Eh
+
+    cursor_symb_on=220
+    cursor_symb_off=223
+
+    rm_msg      db 27, '[29;44mNow in Real Mode. ', 27, '[0m$'
+    pm_msg_wait db 27, '[29;44mAny key to enter protected mode!', 27, '[0m$'
+    pm_msg_out  db 27, '[29;44mNow in Real Mode again! ', 27, '[0m$'
+
+    data_size = $-gdt_null 
+data32 ends
+
+
+code32 segment para public 'code' use32
+    assume cs:code32, ds:data32, ss:stack32
+
+pm_start:
+    ; обновление селекторных регистров
+
+    ; разрешение прерываний
+
+    ; подсчёт доступной памяти
+
+    ; ожидание сигнала выхода из защищенного режима
+
+    ; запрет прерываний
+
+    ; прыжок в 16-и битный сегмент кода
+    db  0EAh
+    dd  offset return_rm
+    dw  code16s
+
+code32 ends
+
+
+code16 segment para public 'CODE' use16
+assume cs:code16, ds:data32, ss: stack32
+start:
+
+    ; настройка таблицы глобальных дескрипторов
+
+    ; загрузка регистра таблицы глобальных дескрипторов
+
+    ; настройка таблицы дескрипторов прерываний
+
+    ; сохранение масок
+
+    ; перепрограммирование контроллеров прерываний
+    ; на работу в защищенном режиме
+
+    ; установка масок на контроллеры прерываний
+
+    ; загрузка регистра таблицы дескрипторов прерываний
+
+    ; открытие линии А20
+
+    ; запрет прерываний
+
+    ; переход в защищенный режим
+
+    ; прыжок в 32-х битный сегмент кода
+    db  66h
+    db  0EAh
+    dd  offset pm_start
+    dw  code32s
+
+return_rm:
+    ; переход в реальный режим
+    ; обновление сегментных регистров
+
+    ; перепрограммирование контроллеров прерываний
+    ; на работу в реальном режиме
+
+    ; восстановление масок прерываний
+
+    ; загрузка таблицы векторов прерываний реального режима
+
+    ; закрытие линии A20
+
+    ; разрешение прерываний
+
+    ; завершение программы DOS
+code16 ends
+
+end start

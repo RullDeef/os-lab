@@ -1,0 +1,18 @@
+\strdef{sockaddr\_in}
+
+\begin{lstlisting}
+struct sockaddr_in {
+  __kernel_sa_family_t	sin_family;	/* Address family		*/
+  __be16		sin_port;	/* Port number			*/
+  struct in_addr	sin_addr;	/* Internet address		*/
+
+  /* Pad to size of `struct sockaddr'. */
+  unsigned char		__pad[__SOCK_SIZE__ - sizeof(short int) -
+			sizeof(unsigned short int) - sizeof(struct in_addr)];
+};
+
+/* Internet address. */
+struct in_addr {
+	__be32	s_addr; /* unsigned int */
+};
+\end{lstlisting}
